@@ -14,8 +14,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Planckster is designed to be easy to use, even for those who are new to the platform.
+        This guide will help you get started with Planckster and show you how to use it for your usecases.
       </>
     ),
   },
