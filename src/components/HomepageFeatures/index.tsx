@@ -10,32 +10,29 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Dive into Concepts',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Planckster is designed to be easy to use, even for those who are new to the platform.
-        This guide will help you get started with Planckster and show you how to use it for your usecases.
+        Get yourself acquainted with the concepts and tools of Satellite Data Augmentation and the Planckster Ecosystem of applications.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Follow along the Tutorials',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Follow along the tutorials to learn how to use the tools and applications of the Planckster Ecosystem.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Learn by Example',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Check out the sample projects, notebooks and code snippets to learn by example.
       </>
     ),
   },

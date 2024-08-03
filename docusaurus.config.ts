@@ -41,13 +41,13 @@ const config: Config = {
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
+        // blog: {
+        //   showReadingTime: true,
+        //   // Please change this to your repo.
+        //   // Remove this to remove the "edit this page" links.
+        //   editUrl:
+        //     'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -71,7 +71,7 @@ const config: Config = {
           position: 'left',
           label: 'Tutorial',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        // {to: '/blog', label: 'Blog', position: 'left'}, // Enable this if you have a blog
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -87,42 +87,42 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to: '/docs/concepts/core-concepts',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'Apps',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Kernel Planckster',
+              href: 'https://kernel-planckster.devmaany.com/docs/',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Websat Planckster',
+              href: 'https://websat-planckster.devmaany.com/',
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: 'Lieutenant Planckster',
+              href: 'https://kubeflow.devmaany.com/',
             },
           ],
         },
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
+            // {
+            //   label: 'Blog',
+            //   to: '/blog',
+            // },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/mpi-dsg/',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Dream Aim Deliver.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Dream Aim Deliver KLG.`,
     },
     prism: {
       theme: prismThemes.github,
