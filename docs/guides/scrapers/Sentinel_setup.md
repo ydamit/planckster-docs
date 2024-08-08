@@ -80,7 +80,7 @@ Before using Docker, you need to have it installed on your system. Follow these 
 By following these steps, you will ensure that Docker is installed and running on your system.
 **Ensure docker is installed and running succesfully before proceeding with the next steps**
 
-### 2. Ensure you have a running instance of Kernel-Planckster , see [Guides](https://dream-aim-deliver.github.io/planckster-docs/docs/category/guides) -> [Kernel-planckster](https://dream-aim-deliver.github.io/planckster-docs/docs/category/kernel-planckster) for help.
+### 2. Ensure you have a running instance of Kernel-Planckster, see [Guides](https://dream-aim-deliver.github.io/planckster-docs/docs/category/guides) -> [Kernel-planckster](https://dream-aim-deliver.github.io/planckster-docs/docs/category/kernel-planckster) for help.
 
 ### 3. Obtain a client ID and client secret from [Sentinel Hub](https://www.sentinel-hub.com/).
 
@@ -101,9 +101,10 @@ cd mpi-sda-sentinel
 ```
 - `git clone https://github.com/dream-aim-deliver/mpi-sda-sentinel.git`:
     - `git clone`: This command is used to create a local copy of a remote repository.
-    - https://github.com/dream-aim-deliver/mpi-sda-sentinel.git: This is the URL of the remote Git repository you want to clone. It points to   the repository hosted on GitHub.
-
-- When you run this command, Git downloads the entire repository (including its history and all files) to a directory on your local machine. The  directory will have the same name as the repository (mpi-sda-sentinel).
+    
+    - https://github.com/dream-aim-deliver/mpi-sda-sentinel.git: This is the URL of the remote Git repository you want to clone. It points to the repository hosted on GitHub.
+    
+    - When you run this command, Git downloads the entire repository (including its history and all files) to the directory on your local machine from which you ran the clone command. The new directory will have the same name as the repository (mpi-sda-sentinel).
 
 - `cd mpi-sda-sentinel`:
     - `cd`: This command is used to change the current directory in your terminal or command prompt.
@@ -135,12 +136,12 @@ docker run --name mpi-satellite \
     --rm \
     -e "HOST=0.0.0.0" \
     -e "PORT=8000" \
-    -e "sh_client_id=35c2e8f8-8796-450a-9770-f4e481949986" \
-    -e "sh_client_secret=Y*X?HpB9W4N&#lWKt!1CQL3cj-)r(6M{n}Nuj6QD"  \
+    -e "sh_client_id= CLIENT_ID" \
+    -e "sh_client_secret= CLIENT_SECRET" \
     -p "8000:8000" \
     mpi-satellite
 ```
-change the `PORT` to any other available port(example 8001) and the `-p` flag (to correspondingly "8001:8001") , if any port conflict occurs.
+change the `PORT` to any other available port(e.g. 8001) and the `-p` flag correspondingly ("8001:8001") , if any port conflict occurs.
 
 ### 4. Run the Demo
 To test the setup , you can run the `demo.sh` file, ensure all the below fields are filled correctly before running the script-

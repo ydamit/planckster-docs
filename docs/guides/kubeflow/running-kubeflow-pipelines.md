@@ -5,7 +5,9 @@ sidebar_position: 2
 
 # Kubeflow Pipelines
 
-Kubeflow Pipelines is a platform for building and deploying portable, scalable machine learning (ML) workflows based on Docker containers. It is a part of the Kubeflow project, which aims to make running ML workloads on Kubernetes simple, portable and scalable. This guide aims to explain and demonstrate how to run a Kubeflow Pipeline.
+Kubeflow Pipelines is a platform for building and deploying portable, scalable machine learning (ML) workflows based on Docker containers. It is a part of the Kubeflow project, which aims to make running ML workloads on Kubernetes simple, portable, and scalable. This guide aims to explain and demonstrate how to run a Kubeflow Pipeline.
+
+**Note:** In Kubeflow, Pipelines are executed within the context of an Experiment. An Experiment in Kubeflow serves as a logical grouping for Pipeline runs, allowing you to track and compare multiple runs of the same Pipeline. Before running a Pipeline, you need to create or select an existing Experiment. Once the Experiment is defined, you can initiate Pipeline runs under it. This structure helps organize and manage your ML workflows more effectively.
 
 ### What is a Pipeline?
 
