@@ -5,16 +5,19 @@ sidebar_position: 3
 
 # Analyzing Scraped Data with Kubeflow Notebooks
 
-## First, connect to kernel-planckster and verify the existance of scraped data
+## First, connect to kernel-planckster:
 
 ```
 kernel_planckster, protocol, file_repository = setup(
     job_id=job_id,
     logger=logger,
 )
+```
 
+#### Verify the existence of scraped data:
+
+```
 source_list = kernel_planckster.list_all_source_data()
-
 ```
 
 #### There should exist an output that looks like the following:
@@ -56,8 +59,9 @@ source_list = kernel_planckster.list_all_source_data()
 #### Download all of the data sources deemed relevant to a local folder in the Kubeflow Notebook
 
 ```
+work_dir = "./.tmp"
 for source in source_list:
-            download_source_if_relevant(source, job_id, tracer_id, scraped_data_repository, work_dir)
+    download_source_if_relevant(source, job_id, tracer_id, scraped_data_repository, work_dir)
 
 ```
 
@@ -78,49 +82,50 @@ file_repository.public_download(signed_url=signed_url, file_path="./LOCAL_DIRECT
 
 ## After saving all relevant data, perform the desired vizualizations:
 
-#### Note: vizualizations require having *matched* sattelite and social media data. This type of augmentation is usually performed by an **Augmentation Repository**, but in case it hasn't, one can use the following code:
+#### Note: visualizations require having *matched* satellite and social media data. This type of augmentation is usually performed by an **Augmentation Repository**, but in case it hasn't, one can use the following code:
 
 ```
- # load tweets (or any kind of scraped social media) data that is relevant to the particular usecase (wildfires/disaster)
- twitter_df = pd.read_json(f'{work_dir}/twitter_augment/data.json', orient="index")
-    telegram_df = pd.read_json(f'{work_dir}/telegram_augment/data.json', orient="index")
-    sentinel_dir = os.path.join(work_dir, "wildfire_coords")
+# load tweets (or any kind of scraped social media) data that is relevant to the particular usecase (wildfires/disaster)
+
+twitter_df = pd.read_json(f'{work_dir}/twitter_augment/data.json', orient="index")
+telegram_df = pd.read_json(f'{work_dir}/telegram_augment/data.json', orient="index")
+sentinel_dir = os.path.join(work_dir, "wildfire_coords")
     
 # load wildfire (or any kind of disaster) data
-    for wildifre_coords_json_file_path in os.listdir(sentinel_dir):
-        data = []
-        sentinel_df= pd.read_json(os.path.join(sentinel_dir,wildifre_coords_json_file_path), orient="index")
-        for index, row in sentinel_df.iloc[0:].iterrows():
-            lattitude = row['latitude']
-            longitude = row['longitude']
-            status = row['status']
-                                                       #title tweet location
-            data.append([status, lattitude, longitude, "n/a", "n/a", "n/a" ])
+for wildifre_coords_json_file_path in os.listdir(sentinel_dir):
+    data = []
+    sentinel_df= pd.read_json(os.path.join(sentinel_dir,wildifre_coords_json_file_path), orient="index")
+    for index, row in sentinel_df.iloc[0:].iterrows():
+        lattitude = row['latitude']
+        longitude = row['longitude']
+        status = row['status']
+                                                    #title tweet location
+        data.append([status, lattitude, longitude, "n/a", "n/a", "n/a" ])
 
 
-# load the sattelite image dates
+# perform matching of satellite image disaster dates with tweets
 underscore_date=wildifre_coords_json_file_path[:wildifre_coords_json_file_path.index("__")]
-        split_date = underscore_date.split("_")
-        sat_image_year = split_date[0]; sat_image_month = key[split_date[1]]; sat_image_day = split_date[2]
-        
-     
-        matches_found_twitter = 0
-        for index, row in twitter_df.iloc[0:].iterrows():
-            tweet_title = row['Title']
-            tweet_tweet = row['Tweet']
-            tweet_location = row['Extracted_Location']
-            tweet_latitude = row['Resolved_Latitude']
-            tweet_longitude = row['Resolved_Longitude']
-            tweet_month = row['Month']
-            tweet_day = row['Day']
-            tweet_year = row['Year']
-            tweet_disaster_type = row['Disaster_Type']
+    split_date = underscore_date.split("_")
+    sat_image_year = split_date[0]; sat_image_month = key[split_date[1]]; sat_image_day = split_date[2]
+    
+    
+    matches_found_twitter = 0
+    for index, row in twitter_df.iloc[0:].iterrows():
+        tweet_title = row['Title']
+        tweet_tweet = row['Tweet']
+        tweet_location = row['Extracted_Location']
+        tweet_latitude = row['Resolved_Latitude']
+        tweet_longitude = row['Resolved_Longitude']
+        tweet_month = row['Month']
+        tweet_day = row['Day']
+        tweet_year = row['Year']
+        tweet_disaster_type = row['Disaster_Type']
 
-            # match sattelite image dates with tweet dates
-            if(int(sat_image_year) == int(tweet_year) and sat_image_month == tweet_month and int(sat_image_day) == int(tweet_day)):
-                matches_found_twitter += 1
-                # save the data
-                data.append([f"tweet about {tweet_disaster_type}", tweet_latitude, tweet_longitude, tweet_title, tweet_tweet, tweet_location ])
+        # match satellite image dates with tweet dates
+        if(int(sat_image_year) == int(tweet_year) and sat_image_month == tweet_month and int(sat_image_day) == int(tweet_day)):
+            matches_found_twitter += 1
+            # save the data
+            data.append([f"tweet about {tweet_disaster_type}", tweet_latitude, tweet_longitude, tweet_title, tweet_tweet, tweet_location ])
         
 
 ```
@@ -187,6 +192,7 @@ for file_path in os.listdir(os.path.join(work_dir, "by_date")):
             
             icon_text=''
             icon_size=''
+
             if "tweet" in status:
                 icon_text='&#128038;'   # Unicode for the bird emoji
                 icon_size=(100,100)
@@ -199,7 +205,8 @@ for file_path in os.listdir(os.path.join(work_dir, "by_date")):
                     ),
                 popup = text
             ).add_to(m)
-           elif "fire" in status: #wildfire
+
+            elif "fire" in status: #wildfire
                 icon_text='&#128293;'   # Unicode for fire emoji
                 icon_size=(30,30)
                 folium.Marker(
@@ -210,11 +217,10 @@ for file_path in os.listdir(os.path.join(work_dir, "by_date")):
                     html='<div style="font-size: 12pt">%s</div>' % icon_text,
                     ),
                 ).add_to(m)
-            
+                
 
 # render the final output:
 m
-
 ```
 
 #### The output should be interactive and have dynamic overlays:
