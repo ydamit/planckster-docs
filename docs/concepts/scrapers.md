@@ -133,8 +133,8 @@ Run Kernel-Planckster from the command line:
 
 #### Access Kernel-Planckster's API and Object Storage
 
--   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
--   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+-   **API:** Accessible at ``` http://localhost:8000/ ``` with an interactive interface at ``` http://localhost:8000/docs ``` for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/``` (or sometimes  ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
 ## Step 2
 
@@ -295,8 +295,8 @@ Run Kernel-Planckster from the command line:
 
 #### Access Kernel-Planckster's API and Object Storage
 
--   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
--   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+-   **API:** Accessible at ``` http://localhost:8000/``` with an interactive interface at ```http://localhost:8000/docs``` for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/``` (or sometimes ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
 
 ## Step2
@@ -463,8 +463,8 @@ Run Kernel-Planckster from the command line:
 
 #### Access Kernel-Planckster's API and Object Storage
 
--   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
--   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+-   **API:** Accessible at ``` http://localhost:8000/ ``` with an interactive interface at ``` http://localhost:8000/docs ``` for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/ ``` (or sometimes ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
 
 ## Step 2
