@@ -33,7 +33,7 @@ Input parameters are common to the *entire pipeline* and thus every single node 
 
 It is **essential** that these input parameters are shared across scrapers, especially job_id and tracer_id. This is because all scrapers upload their files to MinIO using the *relative-path* "/SCRAPER/TRACER_ID/JOB_ID/" where SCRAPER is one of "twitter", "telegram", or "sentinel". 
 
-The disaster-tracking augmentation engine *expects* all scrapers to upload their *final augmented files* to "sda/SCRAPER/TRACER_ID/JOB_ID/augmented". The augmentation engine downloads all files from this path to a temporary directory, runs a matching-algorithm, and uploads the final matched files to MinIO using the *relative-path* "/augmented/{tracer_id}/{job_id}/by_date/". 
+The disaster-tracking augmentation engine *expects* all scrapers to upload their *final augmented files* to "sda/SCRAPER/TRACER_ID/JOB_ID/augmented". The augmentation engine downloads all files from this path to a temporary directory, runs a matching-algorithm, and uploads the final matched files to MinIO using the *relative-path* "/augmented/TRACER_ID/JOB_ID/by_date/". 
 
 Thus, runs for both the scraper-pipeline and augmentation-pipeline need to be constructed using the same job_id and tracer_id. This simple action allows for **linking two pipelines** which is a vital part of our overall workflow. 
 
