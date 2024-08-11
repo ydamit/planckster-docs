@@ -1,97 +1,144 @@
----
-sidebar_label: Data Scrapers
-sidebar_position: 3
----
+Data Scrapers Guide
+===================
 
-# Telegram Scraper
-### Arguments & Inputs
+This guide covers three data scrapers: **Telegram Scraper**, **Twitter Scraper**, and **Sentinel Scraper**. Each section includes setup, configuration, usage, and examples.
 
-#### Kernel-Planckster-specific arguments:
-* `job_id`: Unique identifier for the job.
-* `tracer_id`: Identifier for tracing the job.
-* `kp_host`: Kernel Planckster host.
-* `kp_port`: Kernel Planckster port.
-* `kp_auth_token`: Kernel Planckster authentication token.
-* `kp_scheme`: Kernel Planckster scheme (http/https).
-* `log_level`: Logging level for the scraper.
+Telegram Scraper
+----------------
 
-#### Scraper-specific arguments:
+The Telegram Scraper allows you to extract messages from specific Telegram channels using the Telethon Python package. This section provides detailed instructions on setting up and running the scraper.
 
-##### Telegram API Configuration:
-* `telegram_api_id`: Telegram API ID.
-* `telegram_api_hash`: Telegram API Hash.
-* `telegram_phone_number`: Phone number linked to the Telegram account (optional).
-* `telegram_password`: Password for the Telegram account (optional).
-* `telegram_bot_token`: Telegram bot token (optional).
-* `channel_name`: Name of the Telegram channel to scrape.
+### Setup and Configuration
 
-### Telegram & Scraping
+#### Required Arguments
 
-#### Configuration
-* `get_scraping_client(job_id, logger, telegram_api_id, telegram_api_hash, telegram_phone_number=None, telegram_password=None, telegram_bot_token=None) -> TelegramClient`: 
-  * This function sets up the Telegram client (using Telethon python package).
-  * **Arguments:**
-    * `job_id`: Unique identifier for the job.
-    * `logger`: Logger instance.
-    * `telegram_api_id`: Telegram API ID.
-    * `telegram_api_hash`: Telegram API Hash.
-    * `telegram_phone_number`: Phone number linked to the Telegram account (optional).
-    * `telegram_password`: Password for the Telegram account (optional).
-    * `telegram_bot_token`: Telegram bot token (optional).
-  * **Returns:**
-    * A configured `TelegramClient` instance.
+1.  **Kernel-Planckster-specific arguments**:
 
-#### Retrieving Messages
-* `scrape(job_id, channel_name, tracer_id, scraped_data_repository, telegram_client, openai_api_key, log_level) -> JobOutput`:
-  * This function takes as input the arguments required to scrape the desired data using the Telegram Scraper API.
-  * **Arguments:**
-    * `job_id`: Unique identifier for the job.
-    * `channel_name`: Name of the Telegram channel.
-    * `tracer_id`: Identifier for tracing the job.
-    * `scraped_data_repository`: Repository to store scraped data.
-    * `telegram_client`: Configured `TelegramClient` instance.
-    * `openai_api_key`: API key for OpenAI services.
-    * `log_level`: Logging level.
-  * **Returns:**
-    * A `JobOutput` object with the job state and list of source data.
+    -   `job_id`: A unique identifier for the job.
+    -   `tracer_id`: Used to trace the job.
+    -   `kp_host`: Kernel Planckster host address.
+    -   `kp_port`: Kernel Planckster port number.
+    -   `kp_auth_token`: Authentication token for Kernel Planckster.
+    -   `kp_scheme`: Connection scheme (either `http` or `https`).
+    -   `log_level`: The level of logging information to capture.
+2.  **Telegram API Configuration**:
 
-## Augmentation
+    -   `telegram_api_id`: Your Telegram API ID.
+    -   `telegram_api_hash`: Your Telegram API Hash.
+    -   `telegram_phone_number`: The phone number linked to your Telegram account (optional).
+    -   `telegram_password`: Password for the Telegram account (optional).
+    -   `telegram_bot_token`: Telegram bot token (optional).
+    -   `channel_name`: Name of the Telegram channel to scrape.
 
-* `augment_telegram(client, message, filter)`:
-  * Once the text messages are extracted, this function will handle the augmentation of this data with other data sources for example data scraped through Sentinel API.
-  * **Arguments:**
-    * `client`: Configured Instructor client.
-    * `message`: Telegram message to be processed.
-    * `filter`: Filter string for message relevance.
-  * **Returns:**
-    * A list of augmented data if relevant, otherwise `None`.
+### How to Configure the Telegram Client
 
-* `get_lat_long(location_name)`:
-  * Retrieves latitude and longitude for a given location name using geolocation.
-  * **Arguments:**
-    * `location_name`: Name of the location to retrieve coordinates for.
-  * **Returns:**
-    * Latitude and longitude coordinates.    
+To use the Telegram Scraper, you'll need to set up a Telegram client. Here's how:
 
-## Utility Functions
-
-1. **Extensive Logging and Error Handling**:
-   * The scraper includes in-built error handling mechanisms (`try-except` blocks) and logs various stages of the job execution.
-
-2. **Job State Management**:
-   * The job state is tracked and updated through various stages (`BaseJobState.CREATED`, `BaseJobState.RUNNING`, `BaseJobState.FINISHED`, `BaseJobState.FAILED`).
-
-3. **Cleanup**:
-   * After processing, temporary directories where media files are saved are cleaned up to free up storage.
+1.  **Install the Telethon Package**: Make sure you have the Telethon package installed. You can install it via pip:
 
 
-## How to Run Locally
+    `pip install telethon`
 
-To run the Telegram scraper locally, follow the instructions in the [Local Setup Guide](#).
+2.  **Define the Client Setup Function**: Create a function to set up the Telegram client. This will include passing necessary authentication details:
 
-## Example
+   
+    ``` python
+    from telethon import TelegramClient
 
-```python
+    def get_scraping_client(job_id, logger, telegram_api_id, telegram_api_hashtelegram_phone_number=None, telegram_password=None, telegram_bot_token=None)-> TelegramClient:
+        client = TelegramClient('session_name', telegram_api_id, telegram_api_hash)
+        client.start(phone=telegram_phone_number, password=telegram_password)
+        return client
+
+    ```
+
+### How to Retrieve Messages
+
+Once the client is configured, you can retrieve messages from a specified channel using the `scrape` function.
+
+#### Function: `scrape`
+
+-   **Purpose**: Scrapes messages from a specified Telegram channel.
+-   **Arguments**:
+    -   `job_id`: Unique job identifier.
+    -   `channel_name`: Telegram channel name to scrape.
+    -   `tracer_id`: Job trace identifier.
+    -   `scraped_data_repository`: Repository to store the scraped data.
+    -   `telegram_client`: Configured `TelegramClient` instance.
+    -   `openai_api_key`: OpenAI API key (if needed for processing).
+    -   `log_level`: Logging level.
+
+
+``` python
+async def scrape(job_id, channel_name, tracer_id, scraped_data_repository, telegram_client, openai_api_key, log_level) -> JobOutput:
+    with telegram_client:
+        messages = await telegram_client.get_messages(channel_name, limit=100)
+        for message in messages:
+            # Process each message as needed
+            print(message.text)
+    return JobOutput(state='FINISHED', data=messages)
+
+```
+
+### Augmentation and Utility Functions
+
+-   **Augmenting Data**: You can enhance the scraped messages by integrating data from other sources. For instance:
+
+    ``` python
+    def augment_telegram(client, message, filter):
+        augmented_data = []
+        # Example augmentation logic
+        if filter in message.text:
+            augmented_data.append(message.text)
+        return augmented_data if augmented_data else None
+    ```
+    
+-   **Utility Functions**: Includes logging, error handling, job state management, and cleanup tasks.
+
+### Example: Running the Telegram Scraper Locally
+
+Here is an example demonstrating how to use the Telegram scraper:
+## Step1
+#### Set Up Kernel-Planckster
+
+First, clone the Kernel-Planckster repository onto your local machine:
+
+
+`git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
+
+#### Install Dependencies
+
+Set up a virtual environment for Kernel-Planckster's dependencies.
+Run in the root directory of the kernel-planckster folder
+
+``` python
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Kernel-Planckster uses `poetry` for dependency management:
+
+
+
+`pip install poetry
+poetry install`
+
+> **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
+
+#### Running Kernel-Planckster
+
+Run Kernel-Planckster from the command line:
+
+`poetry run dev:storage`
+
+#### Access Kernel-Planckster's API and Object Storage
+
+-   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+
+## Step 2
+
+``` python
 import logging
 from telethon import TelegramClient
 
@@ -106,129 +153,155 @@ telegram_api_id = "your_api_id"
 telegram_api_hash = "your_api_hash"
 telegram_phone_number = "your_phone_number"
 telegram_password = "your_password"
-telegram_bot_token = "your_bot_token"
 channel_name = "your_channel_name"
-openai_api_key = "your_openai_api_key"
 log_level = logging.INFO
 
 # Set up the Telegram client
-client = get_scraping_client(job_id, logger, telegram_api_id, telegram_api_hash, telegram_phone_number, telegram_password, telegram_bot_token)
-
-# Create a ScrapedDataRepository instance (implement as needed)
-scraped_data_repository = ScrapedDataRepository()
+client = get_scraping_client(job_id, logger, telegram_api_id, telegram_api_hash, telegram_phone_number, telegram_password)
 
 # Run the scraper
-output = await scrape(job_id, channel_name, tracer_id, scraped_data_repository, client, openai_api_key, log_level)
+output = scrape(job_id, channel_name, tracer_id, None, client, None, log_level)
 
 # Output the result
 print(output)
 ```
 
-# Twitter Scraper
-### Arguments & Inputs
-
-#### Kernel-Planckster-specific arguments:
-* `job_id`: Unique identifier for the job.
-* `tracer_id`: Identifier for tracing the job.
-* `kp_host`: Kernel Planckster host.
-* `kp_port`: Kernel Planckster port.
-* `kp_auth_token`: Kernel Planckster authentication token.
-* `kp_scheme`: Kernel Planckster scheme (http/https).
-* `log_level`: Logging level for the scraper.
-
-#### Scraper-specific arguments:
-
-##### Twitter API Configuration:
-* `query`: Search query for Twitter.
-* `start_date`: Start date for the search (YYYY-MM-DD).
-* `end_date`: End date for the search (YYYY-MM-DD).
-* `scraper_api_key`: API key for the scraper service.
-* `openai_api_key`: API key for OpenAI services.
-
-### Twitter & Scraping
-
-#### Configuration
-* `setup(job_id, logger, kp_auth_token, kp_host, kp_port, kp_scheme) -> Tuple[KernelPlancksterGateway, ProtocolEnum, FileRepository]`: 
-  * This function sets up the Kernel Planckster Gateway, the storage protocol, and the file repository.
-  * **Arguments:**
-    * `job_id`: Unique identifier for the job.
-    * `logger`: Logger instance.
-    * `kp_auth_token`: Kernel Planckster authentication token.
-    * `kp_host`: Kernel Planckster host.
-    * `kp_port`: Kernel Planckster port.
-    * `kp_scheme`: Kernel Planckster scheme (http/https).
-  * **Returns:**
-    * A tuple containing the Kernel Planckster Gateway, storage protocol, and file repository.
-
-#### Retrieving Tweets
-* `scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_repository, work_dir, log_level, scraper_api_key, openai_api_key) -> JobOutput`:
-  * This function takes as input the arguments required to scrape the desired data using the Twitter Scraper API.
-  * **Arguments:**
-    * `job_id`: Unique identifier for the job.
-    * `tracer_id`: Identifier for tracing the job.
-    * `query`: Search query for Twitter.
-    * `start_date`: Start date for the search (YYYY-MM-DD).
-    * `end_date`: End date for the search (YYYY-MM-DD).
-    * `scraped_data_repository`: Repository to store scraped data.
-    * `work_dir`: Directory for temporary work files.
-    * `log_level`: Logging level.
-    * `scraper_api_key`: API key for the scraper service.
-    * `openai_api_key`: API key for OpenAI services.
-  * **Returns:**
-    * A `JobOutput` object with the job state and list of source data.
-
-## Augmentation
-
-* `augment_tweet(client, tweet, filter)`:
-  * Once the tweets are extracted, this function will handle the augmentation of this data with other data sources for example data scraped through Sentinel API.
-  * **Arguments:**
-    * `client`: Configured Instructor client.
-    * `tweet`: Tweet data to be processed.
-    * `filter`: Filter string for tweet relevance.
-  * **Returns:**
-    * A list of augmented data if relevant, otherwise `None`.
-
-  * `get_lat_long(location_name)`:
-  * Retrieves latitude and longitude for a given location name using geolocation.
-  * **Arguments:**
-    * `location_name`: Name of the location to retrieve coordinates for.
-  * **Returns:**
-    * Latitude and longitude coordinates.  
-
-## Utility Functions
-
-1. **Extensive Logging and Error Handling**:
-   * The scraper includes in-built error handling mechanisms (`try-except` blocks) and logs various stages of the job execution.
-
-2. **Job State Management**:
-   * The job state is tracked and updated through various stages (`BaseJobState.CREATED`, `BaseJobState.RUNNING`, `BaseJobState.FINISHED`, `BaseJobState.FAILED`).
-
-3. **Cleanup**:
-   * After processing, temporary directories where media files are saved are cleaned up to free up storage.
-
-* `save_tweets(tweets, file_path)`:
-  * Saves tweets to the specified file path in JSON format.
-  * **Arguments:**
-    * `tweets`: List of tweets to be saved.
-    * `file_path`: Path to save the tweets.
-    
-* `load_tweets(file_path)`:
-  * Loads tweets from the specified file path.
-  * **Arguments:**
-    * `file_path`: Path to load the tweets from.
-  * **Returns:**
-    * Loaded tweet data.
 
 
-## How to Run Locally
+Twitter Scraper
+---------------
 
-To run the Twitter scraper locally, follow the instructions in the [Local Setup Guide](#).
+The Twitter Scraper is designed to collect tweets based on search queries, allowing you to specify date ranges and filter results. This section provides a step-by-step guide to using it effectively.
 
-## Example
+### Setup and Configuration
 
-```python
+#### Required Arguments
+
+1.  **Kernel-Planckster-specific arguments**:
+
+    -   `job_id`: Unique job identifier.
+    -   `tracer_id`: Job trace identifier.
+    -   `kp_host`: Kernel Planckster host address.
+    -   `kp_port`: Kernel Planckster port number.
+    -   `kp_auth_token`: Authentication token for Kernel Planckster.
+    -   `kp_scheme`: Connection scheme (`http` or `https`).
+    -   `log_level`: Logging level.
+2.  **Twitter API Configuration**:
+
+    -   `query`: The search query to use for retrieving tweets.
+    -   `start_date`: The start date for the search in `YYYY-MM-DD` format.
+    -   `end_date`: The end date for the search in `YYYY-MM-DD` format.
+    -   `scraper_api_key`: API key for the scraper service.
+    -   `openai_api_key`: API key for OpenAI services (if needed).
+
+### How to Configure the Twitter Scraper
+
+To get started with the Twitter Scraper, follow these steps:
+
+1.  **Install Required Libraries**: Make sure you have the necessary libraries installed. Depending on your implementation, you might need libraries such as `tweepy` or other HTTP clients.
+
+
+    `pip install tweepy`
+
+2.  **Define the Setup Function**: Create a function to set up the scraper environment:
+
+    ``` python
+    import tweepy
+
+    def setup(job_id, logger, kp_auth_token, kp_host, kp_port, kp_scheme):
+        # Setup logic goes here
+        client = tweepy.Client(bearer_token=kp_auth_token)
+        return client
+    ```
+
+### How to Retrieve Tweets
+
+The `scrape` function retrieves tweets based on the provided search query and date range.
+
+#### Function: `scrape`
+
+-   **Purpose**: Extracts tweets matching a specific query and date range.
+-   **Arguments**:
+    -   `job_id`: Unique job identifier.
+    -   `tracer_id`: Job trace identifier.
+    -   `query`: The search query for Twitter.
+    -   `start_date`: Start date in `YYYY-MM-DD` format.
+    -   `end_date`: End date in `YYYY-MM-DD` format.
+    -   `scraped_data_repository`: Repository to store scraped data.
+    -   `log_level`: Logging level.
+    -   `scraper_api_key`: API key for the scraper.
+    -   `openai_api_key`: API key for OpenAI (if needed).
+
+
+``` python
+def scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_repository, log_level, scraper_api_key, openai_api_key):
+    client = setup(job_id, logger, scraper_api_key, None, None, None)
+    tweets = client.search_recent_tweets(query=query, start_time=start_date, end_time=end_date, max_results=100)
+    for tweet in tweets.data:
+        print(tweet.text)
+    return JobOutput(state='FINISHED', data=tweets.data)
+```
+
+### Augmentation and Utility Functions
+
+-   **Augmenting Data**: Enhance the retrieved tweets by incorporating additional data or insights:
+
+    ``` python
+    def augment_tweet(client, tweet, filter):
+        if filter in tweet.text:
+            return tweet
+        return None
+    ```
+
+
+-   **Utility Functions**: These include logging, error handling, job state management, and saving/loading tweets.
+
+### Example: Running the Twitter Scraper Locally
+
+Here's an example to demonstrate how to use the Twitter scraper:
+
+## Step1
+#### Set Up Kernel-Planckster
+
+First, clone the Kernel-Planckster repository onto your local machine:
+
+
+`git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
+
+#### Install Dependencies
+
+Set up a virtual environment for Kernel-Planckster's dependencies.
+Run in the root directory of the kernel-planckster folder
+
+``` python
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Kernel-Planckster uses `poetry` for dependency management:
+
+
+
+`pip install poetry
+poetry install`
+
+> **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
+
+#### Running Kernel-Planckster
+
+Run Kernel-Planckster from the command line:
+
+`poetry run dev:storage`
+
+#### Access Kernel-Planckster's API and Object Storage
+
+-   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+
+
+## Step2
+``` python
 import logging
-from app.sdk.scraped_data_repository import ScrapedDataRepository
 
 # Set up logging
 logger = logging.getLogger('twitter_scraper')
@@ -240,125 +313,163 @@ tracer_id = "abc123"
 query = "forest fire"
 start_date = "2023-01-01"
 end_date = "2023-01-31"
-work_dir = "/path/to/work/dir"
 log_level = logging.INFO
 scraper_api_key = "your_scraper_api_key"
-openai_api_key = "your_openai_api_key"
-
-# Create a ScrapedDataRepository instance (implement as needed)
-scraped_data_repository = ScrapedDataRepository()
 
 # Run the scraper
-output = scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_repository, work_dir, log_level, scraper_api_key, openai_api_key)
+output = scrape(job_id, tracer_id, query, start_date, end_date, None, log_level, scraper_api_key, None)
 
 # Output the result
 print(output)
 
 ```
 
-# Sentinel Scraper Documentation
 
-## Scraper
+Sentinel Scraper
+----------------
 
-### Arguments & Inputs
+The Sentinel Scraper is used to retrieve satellite images from the Sentinel Hub API. It provides options to specify geographic bounding boxes, date ranges, and resolution settings.
 
-#### Kernel-Planckster-specific arguments:
-* `job_id`: Unique identifier for the job.
-* `tracer_id`: Identifier for tracing the job.
-* `kp_host`: Kernel Planckster host.
-* `kp_port`: Kernel Planckster port.
-* `kp_auth_token`: Kernel Planckster authentication token.
-* `kp_scheme`: Kernel Planckster scheme (http/https).
-* `log_level`: Logging level for the scraper.
+### Setup and Configuration
 
-#### Scraper-specific arguments:
+#### Required Arguments
 
-##### Define the WGS84 coordinate bounding box; float
-* `long_left`: Leftmost longitude, e.g., -113.2
-* `lat_down`: Bottommost latitude, e.g., 57.2
-* `long_right`: Rightmost longitude, e.g., -108.5
-* `lat_up`: Topmost latitude, e.g., 59.3
+1.  **Kernel-Planckster-specific arguments**:
 
-##### Selecting the date range: "YYYY-MM-DD" format
-* `start_date`: Day to begin scanning, e.g., "2023-06-01"
-* `end_date`: Day to finish scanning, e.g., "2023-06-20"
-*Note:* Depending on the specific satellite (e.g., Landsat, Sentinel, etc.), the temporal resolution varies. It’s unlikely to get a new image every day in a region, so using large timeframes and multiple satellites is the best way to receive coverage.
+    -   `job_id`: Unique job identifier.
+    -   `tracer_id`: Job trace identifier.
+    -   `kp_host`: Kernel Planckster host address.
+    -   `kp_port`: Kernel Planckster port number.
+    -   `kp_auth_token`: Authentication token for Kernel Planckster.
+    -   `kp_scheme`: Connection scheme (`http` or `https`).
+    -   `log_level`: Logging level.
+2.  **Sentinel Hub Configuration**:
 
-##### Spatial Resolution: integer value (meters)
-* `resolution`: Meters above the surface, e.g., 120
-*Note:* Resolution must be greater than 10 meters and the final image cannot exceed 2500 x 2500 pixels. Thus, one can either have high resolution (fewer meters above the surface) and a small bounding box or low resolution (more meters above the surface) and a large bounding box.
+    -   `evalscript`: Sentinel Hub Evalscript to use.
+    -   `bbox`: Bounding box of the area of interest.
+    -   `resolution`: Spatial resolution in meters.
+    -   `cloud_coverage`: Maximum allowable cloud coverage percentage.
+    -   `start_date`: Start date for image acquisition in `YYYY-MM-DD` format.
+    -   `end_date`: End date for image acquisition in `YYYY-MM-DD` format.
+    -   `sh_client_id`: Sentinel Hub client ID.
+    -   `sh_client_secret`: Sentinel Hub client secret.
+
+### How to Configure the Sentinel Hub Client
+
+To use the Sentinel Scraper, follow these steps:
+
+1.  **Install Required Libraries**: Ensure that you have the necessary libraries installed, such as `sentinelhub` or `requests`.
+
+    `pip install sentinelhub`
+
+2.  **Define the Setup Function**: Create a function to set up the Sentinel Hub client:
+
+    ``` python
+    from sentinelhub import SHConfig, SentinelHubRequest
+
+    def setup(job_id, logger, sh_client_id, sh_client_secret, evalscript, bbox, resolution, cloud_coverage):
+        config = SHConfig()
+        config.sh_client_id = sh_client_id
+        config.sh_client_secret = sh_client_secret
+        return config
+    ```
+### How to Retrieve Satellite Images
+
+The `scrape` function retrieves satellite images from the Sentinel Hub based on the specified parameters.
+
+#### Function: `scrape`
+
+-   **Purpose**: Fetches satellite images from Sentinel Hub.
+-   **Arguments**:
+    -   `job_id`: Unique job identifier.
+    -   `tracer_id`: Job trace identifier.
+    -   `evalscript`: Sentinel Hub Evalscript.
+    -   `bbox`: Bounding box for the area of interest.
+    -   `resolution`: Spatial resolution in meters.
+    -   `cloud_coverage`: Maximum cloud coverage percentage.
+    -   `start_date`: Start date in `YYYY-MM-DD` format.
+    -   `end_date`: End date in `YYYY-MM-DD` format.
+    -   `scraped_data_repository`: Repository to store scraped data.
+    -   `sh_client_id`: Sentinel Hub client ID.
+    -   `sh_client_secret`: Sentinel Hub client secret.
+    -   `openai_api_key`: API key for OpenAI (if needed).
+
+``` python
+def scrape(job_id, tracer_id, evalscript, bbox, resolution, cloud_coverage, start_date, end_date, scraped_data_repository, sh_client_id, sh_client_secret, openai_api_key):
+    config = setup(job_id, logger, sh_client_id, sh_client_secret, evalscript, bbox, resolution, cloud_coverage)
+
+    request = SentinelHubRequest(
+        evalscript=evalscript,
+        input_data=[SentinelHubRequest.input_data(data_source=DataSource.SENTINEL2_L1C, time_interval=(start_date, end_date))],
+        responses=[SentinelHubRequest.output_response('default', MimeType.TIFF)],
+        bbox=bbox,
+        size=(resolution, resolution),
+        config=config
+    )
+
+    images = request.get_data()
+    # Process images as needed
+    return JobOutput(state='FINISHED', data=images)
+```
+
+### Augmentation and Utility Functions
+
+-   **Augmenting Data**: You can enhance satellite images by applying image processing techniques:
+
+    ``` python
+    def augment_image(image, filter):
+        # Apply augmentation logic
+        return processed_image
+    ```
+
+-   **Utility Functions**: Includes logging, error handling, job state management, and saving/loading images.
+
+### Example: Running the Sentinel Scraper Locally
+
+Here's an example to demonstrate how to use the Sentinel scraper:
+
+## Step1
+#### Set Up Kernel-Planckster
+
+First, clone the Kernel-Planckster repository onto your local machine:
 
 
-### Sentinelhub & Scraping
+`git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
 
-#### Configuration
-* `get_scraping_config(job_id, logger, sentinel_client_id, sentinel_client_secret) -> SHConfig`: 
-  * This function sets up the Sentinel client configuration (using SentinelHub API).
-  * **Arguments:**
-    * `job_id`: Unique identifier for the job.
-    * `logger`: Logger instance.
-    * `sentinel_client_id`: SentinelHub API Client ID.
-    * `sentinel_client_secret`: SentinelHub API Client Secret.
-  * **Returns:**
-    * A configured `SHConfig` instance.
+#### Install Dependencies
 
-#### Retrieving Images
-* `get_images(logger, job_id, tracer_id, scraped_data_repository, output_data_list, protocol, coords_wgs84, evalscript_true_color, config, start_date, end_date, resolution, image_dir) -> list[KernelPlancksterSourceData]`:
-  * This function takes as input the arguments required to scrape the desired data using the Sentinel API.
-  * **Arguments:**
-    * `logger`: Logger instance.
-    * `job_id`: Unique identifier for the job.
-    * `tracer_id`: Identifier for tracing the job.
-    * `scraped_data_repository`: Repository to store scraped data.
-    * `output_data_list`: List to store output data.
-    * `protocol`: Storage protocol.
-    * `coords_wgs84`: Tuple of coordinates (long_left, lat_down, long_right, lat_up).
-    * `evalscript_true_color`: Evalscript for Sentinel Hub request.
-    * `config`: Sentinel Hub configuration object.
-    * `start_date`: Start date for image retrieval.
-    * `end_date`: End date for image retrieval.
-    * `resolution`: Spatial resolution in meters.
-    * `image_dir`: Directory to save images.
-  * **Returns:**
-    * A list of `KernelPlancksterSourceData` objects.
+Set up a virtual environment for Kernel-Planckster's dependencies.
+Run in the root directory of the kernel-planckster folder
 
-## Augmentation
+``` python
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-* `augment_images(logger, job_id, tracer_id, scraped_data_repository, output_data_list, protocol, coords_wgs84, image_dir) -> list[KernelPlancksterSourceData]`:
-  * This function processes the images to detect certain features, such as forest fires.
-  * **Arguments:**
-    * `logger`: Logger instance.
-    * `job_id`: Unique identifier for the job.
-    * `tracer_id`: Identifier for tracing the job.
-    * `scraped_data_repository`: Repository to store scraped data.
-    * `output_data_list`: List to store output data.
-    * `protocol`: Storage protocol.
-    * `coords_wgs84`: Tuple of coordinates (long_left, lat_down, long_right, lat_up).
-    * `image_dir`: Directory where images are saved.
-  * **Returns:**
-    * A list of `KernelPlancksterSourceData` objects.
+Kernel-Planckster uses `poetry` for dependency management:
 
-## Utility Functions
 
-1. **Extensive Logging and Error Handling**:
-   * The scraper includes in-built error handling mechanisms (`try-except` blocks) and logs various stages of the job execution.
 
-2. **Job State Management**:
-   * The job state is tracked and updated through various stages (`BaseJobState.CREATED`, `BaseJobState.RUNNING`, `BaseJobState.FINISHED`, `BaseJobState.FAILED`).
+`pip install poetry
+poetry install`
 
-3. **Cleanup**:
-   * After processing, temporary directories where images are saved are cleaned up to free up storage.
+> **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
 
-## How to Run Locally
+#### Running Kernel-Planckster
 
-To run the Sentinel scraper locally, follow the instructions in the [Local Setup Guide](#).
+Run Kernel-Planckster from the command line:
 
-## Example
+`poetry run dev:storage`
 
-```python
+#### Access Kernel-Planckster's API and Object Storage
+
+-   **API:** Accessible at <http://localhost:8000/> with an interactive interface at <http://localhost:8000/docs> for testing and debugging.
+-   **Object Storage:** Accessible via the MinIO server at <http://localhost:9001/> (or sometimes <http://localhost:9091/>). The "SDA" bucket is created when a scraper is run.
+
+
+## Step 2
+``` python
 import logging
-from sentinelhub import SHConfig
-from app.sdk.scraped_data_repository import ScrapedDataRepository
 
 # Set up logging
 logger = logging.getLogger('sentinel_scraper')
@@ -367,27 +478,23 @@ logging.basicConfig(level=logging.INFO)
 # Define arguments
 job_id = 123
 tracer_id = "abc123"
-long_left = -113.2
-lat_down = 57.2
-long_right = -108.5
-lat_up = 59.3
-start_date = "2023-06-01"
-end_date = "2023-06-20"
-resolution = 120
-image_dir = "/path/to/image_dir"
+evalscript = "your_evalscript"
+bbox = (13.822, 45.850, 13.928, 45.992)
+resolution = 100
+cloud_coverage = 20
+start_date = "2023-01-01"
+end_date = "2023-01-31"
 log_level = logging.INFO
-sentinel_client_id = "your_sentinel_client_id"
-sentinel_client_secret = "your_sentinel_client_secret"
-
-# Set up the Sentinel client
-config = get_scraping_config(job_id, logger, sentinel_client_id, sentinel_client_secret)
-
-# Create a ScrapedDataRepository instance (implement as needed)
-scraped_data_repository = ScrapedDataRepository()
+sh_client_id = "your_sh_client_id"
+sh_client_secret = "your_sh_client_secret"
 
 # Run the scraper
-output = scrape(job_id, tracer_id, scraped_data_repository, log_level, long_left, lat_down, long_right, lat_up, config, start_date, end_date, image_dir, resolution)
+output = scrape(job_id, tracer_id, evalscript, bbox, resolution, cloud_coverage, start_date, end_date, None, sh_client_id, sh_client_secret, None)
 
 # Output the result
 print(output)
 ```
+
+Conclusion
+----------
+This comprehensive guide provides detailed instructions on setting up and using Telegram, Twitter, and Sentinel scrapers. By following these steps, you can effectively gather data from these platforms for your specific needs. Ensure you have all necessary credentials and configurations set up before running each scraper.
