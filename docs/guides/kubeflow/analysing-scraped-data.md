@@ -225,5 +225,5 @@ m
 
 #### The output should be interactive and have dynamic overlays:
 
-![link text](./assets/2024-08-05-172627_hyprshot.png)
+![link text](./images/demo-output.png)
 
