@@ -7,7 +7,7 @@ sidebar_position: 4
 
 ## Creating a Pipeline Notebook:
 
-Navigate to the "Notebooks" page of Kubeflow and press *+ New Notebook*:
+#### Navigate to the "Notebooks" page of Kubeflow and press *+ New Notebook*:
 
 ![config 1](images/notebook-config-1.png)
 
@@ -125,15 +125,15 @@ Note that a pipeline can only be uploaded *once* with the same version. To reupl
 
 ## Create a run for the pipeline:
 
-First, navigate to the Pipelines page:
+#### First, navigate to the Pipelines page:
 
 ![pipelines page](images/pipelines-page.png)
 
-Click on a custom pipeline and select *+ Create run*
+#### Click on a custom pipeline and select *+ Create run*
 
 ![custom pipeline page](images/custom-pipeline-page.png)
 
-Configure the run:
+#### Configure the run:
 
 ![custom pipeline config 1](images/custom-pipeline-config-1.png)
 ![custom pipeline config 2](images/custom-pipeline-config-2.png)
@@ -144,11 +144,11 @@ Configure the run:
 
 Click *Start* 
 
-View logs:
+#### View logs:
 
 ![view logs](images/view-logs.png)
 
-Ensure successful job completion:
+#### Ensure successful job completion:
 
 ![successful job completion](images/successful-job-completion.png)
 
