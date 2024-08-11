@@ -10,7 +10,7 @@ sidebar_position: 4
 The DAG or *Directed Acyclic Graph* is the visual representation of a Kubeflow pipeline. It consists of *pipeline nodes* which are actually *wrappers* that configure and run a docker container.
 
 ### Scraper DAG:
-~[Scraper DAG](images/scraper-dag.png)
+![Scraper DAG](images/scraper-dag.png)
 
 The Scraper DAG consists of **3 nodes** which run in parallel. Each node is a wrapper for one of the three included scrapers (sentinel, telegram, twitter).
 
@@ -46,7 +46,7 @@ Arguments are what are fed via the CMD line to the scraper before it runs. Unlik
 * The only twitter-specific argument is "query" which is the unique search-term to use when scraping tweets.
 * The augmentation engine takes no additional arguments. 
 
-#### Image
+### Image
 
 The Image name is critical as it specifies which dockerized representation of the scraper the wrapper should use. For sentinel, we choose the image "maany/mpi-sda-satellite:2.0.0" hosted on DockerHub (the other scrapers and augmentation engine are named similarly). 
 
