@@ -50,8 +50,6 @@ If Kernel Planckster is running, it will return the expected response:
 
 ![Four](5.png)
 
-### Documentation
-
 
 ### Errors
 
@@ -63,16 +61,12 @@ In this case, an error was triggered on purpose by disabling Internet connection
 However, if everything is down, then the link for Kernel Planckster will be broken and you will not even see the Swagger UI.
 
 
-## Create/Register Endpoints
+## Create/Register and List Endpoints
 
 We can create new instances of any of our core concepts in Kernel Planckster's database using its API, except for `Client`, as this feature is not available at the time of writing this guide.
 That is, for example, using Kernel Planckster's API we can register `Source Data`, create new `Research Context` and `Conversation` instances, and even create new `Message` instances in the database (although this will not generate any LLM response, as that functionality is triggered by [Websat](../../websat/websat-features-and-ui-walkthrough.md)).
 
-
-## List Endpoints
-
-Once we have instances of our core concepts in Kernel Planckster's database, we can list them with the "list" class of endpoints.
-
+Once we have instances of our core concepts in Kernel Planckster's database, we can list them with the "list" class of endpoints, by providing the input parameters required by the endpoint.
 
 
 ## Schemas
