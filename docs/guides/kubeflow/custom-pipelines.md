@@ -7,7 +7,7 @@ sidebar_position: 4
 
 ## How to create a Pipeline Notebook?
 
-### 1. Navigate to the "Notebooks" page of Kubeflow and press *+ New Notebook*.**
+### 1. Navigate to the "Notebooks" page of Kubeflow and press `+ New Notebook`
 
 A page like the following will be displayed:
 
@@ -28,9 +28,9 @@ A page like the following will be displayed:
 
 ## How to create a new DAG with existing pipeline elements?
 
-### 1. Create and setup the .ipynb Notebook
+### 1. Create and setup the `.ipynb` Notebook
 
-```
+```python
 !pip install kfp==1.8.22
 import kfp
 from kfp import compiler, dsl
@@ -52,7 +52,7 @@ kfp.Client() # this can be used to test if the connection is successful
 
 In general, components can be loaded and reused using the following code:
 
-```
+```python
 component = kfp.components.load_component_from_file("./component.txt")
 ```
 
@@ -69,8 +69,8 @@ We can load the sentinel, twitter, and telegram components defined in the origin
 In general, components can be saved with the following code after ```component_wrapper``` is defined:
 
 
-```
-#save component
+```python
+# save component
 with open("./components/component.txt", "w") as text_file:
     text_file.write(func_to_component_text(component_wrapper, base_image="maany/mpi-sda-component:version"))
 
@@ -88,7 +88,7 @@ This is how we save components to .txt files in the original *sda-disaster-scrap
 
 In general, custom pipelines are assembled as a set of tasks with execution options:
 
-```
+```python
 def custom_pipeline_1(INPUT PARAMETERS): # Input Parameters can be adjusted in the Kubeflow UI
 
     # parallel execution:
@@ -107,7 +107,7 @@ def custom_pipeline_1(INPUT PARAMETERS): # Input Parameters can be adjusted in t
 
 In general, custom pipelines are compiled to a .yaml file which is then uploaded to Kubeflow:
 
-```
+```python
 from kfp import compiler
 
 #save the pipeline locally
@@ -134,11 +134,11 @@ Note that a pipeline can only be uploaded *once* with the same version. To reupl
 
 ![pipelines page](images/pipelines-page.png)
 
-### 2. Click on a custom pipeline and select *+ Create run***
+### 2. Click on a custom pipeline and select `+ Create run`
 
 ![custom pipeline page](images/custom-pipeline-page.png)
 
-### 3. Configure the run:**
+### 3. Configure the run:
 
 * Leave pipeline name, version, and run name as default.
 * Choose an experiment that is relevant to the run: this is purely organizational.

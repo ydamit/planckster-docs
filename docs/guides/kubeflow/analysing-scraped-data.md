@@ -9,7 +9,7 @@ This guide walks you through the [Kernel-Planckster Tutorial Notebook](https://k
 
 ### Step 1: First, connect to kernel-planckster:
 
-```
+```python
 kernel_planckster, protocol, file_repository = setup(
     job_id=job_id,
     logger=logger,
@@ -18,13 +18,13 @@ kernel_planckster, protocol, file_repository = setup(
 
 ### Step 2: Verify the existence of scraped data:
 
-```
+```python
 source_list = kernel_planckster.list_all_source_data()
 ```
 
 There should exist an output that looks like the following:
 
-```
+```python
 [
 
 {'created_at': '2024-04-14T23:59:19.083454',
@@ -50,7 +50,9 @@ There should exist an output that looks like the following:
   "type": "json",
   "protocol": "s3",
   "status": "available"
-}
+},
+
+{
 
 ...
 
@@ -62,7 +64,7 @@ Note the mix of scraped and augmented data that is pulled.
 
 ### Step 3: Download all of the data sources deemed relevant to a local folder in the Kubeflow Notebook
 
-```
+```python
 work_dir = "./.tmp"
 for source in source_list:
     download_source_if_relevant(source, job_id, tracer_id, scraped_data_repository, work_dir)
@@ -71,7 +73,7 @@ for source in source_list:
 
 Where ```download_source_if_relevant``` is a function that calls:
 
-```
+```python
 signed_url = kernel_planckster.download_from_signed_url(source) 
 file_repository.public_download(signed_url=signed_url, file_path="./LOCAL_DIRECTORY/some_file_name.format")
 
@@ -88,7 +90,7 @@ Or, use the utility functions in ```scraped_data_repository.py``` that take care
 
 **Note:** visualizations require having *matched* satellite and social media data. This type of augmentation is usually performed by an **Augmentation Repository**, but in case it has not, one can use the following code:
 
-```
+```python
 # load tweets (or any kind of scraped social media) data that is relevant to the particular usecase (wildfires/disaster)
 
 twitter_df = pd.read_json(f'{work_dir}/twitter_augment/data.json', orient="index")
@@ -139,7 +141,7 @@ Clearly, tweets that are relevant to a particular disaster and ouccur on the sam
 ### Step 5: Analyze the output using leafmap:
 
 1. Load the true-color image from our sentinel dataset:
-```
+```python
 from pystac_client import Client
 
 client = Client.open("https://planetarycomputer.microsoft.com/api/stac/v1")
@@ -158,7 +160,7 @@ for item in items:
 
 2. Create the interactive leafmap:
 
-```
+```python
 import leafmap.foliumap as leafmap #choose one of 6 plotting backends
 
 m = leafmap.Map()
@@ -174,8 +176,7 @@ m
 
 3. Overlay the augmented social media data and disaster events:
 
-```
-
+```python
 work_dir = './.tmp'  #  define your work directory here
 bounding_box = (-156.708984,20.759645,-156.299744,20.955027) #set coords as well
 import os

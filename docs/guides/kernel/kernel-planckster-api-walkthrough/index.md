@@ -83,3 +83,10 @@ Since an endpoint response can be a "success" or an "error", any specific view m
 These optional error attributes are not used in case our endpoint response is a success:
 
 ![View models](view-models.png)
+
+
+## Conclusion
+
+In this guide, we have covered the Kernel Planckster REST API and how to interact with it using Swagger UI.
+We have seen how to check the status of Kernel Planckster, create new instances of our core concepts, and list the instances available in the database.
+We have also seen the data types managed by Kernel Planckster and the view models that represent the output of the endpoints.
