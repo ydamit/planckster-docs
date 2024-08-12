@@ -30,7 +30,7 @@ The Telegram Scraper allows you to extract messages from specific Telegram chann
     -   `telegram_bot_token`: Telegram bot token (optional).
     -   `channel_name`: Name of the Telegram channel to scrape.
 
-### How to Configure the Telegram Client
+### Telegram Scraper Configuration
 
 To use the Telegram Scraper, you'll need to set up a Telegram client. Here's how:
 
@@ -52,7 +52,7 @@ To use the Telegram Scraper, you'll need to set up a Telegram client. Here's how
 
     ```
 
-### How to Retrieve Messages
+### Retrieving Messages
 
 Once the client is configured, you can retrieve messages from a specified channel using the `scrape` function.
 
@@ -98,15 +98,17 @@ async def scrape(job_id, channel_name, tracer_id, scraped_data_repository, teleg
 ### Example: Running the Telegram Scraper Locally
 
 Here is an example demonstrating how to use the Telegram scraper:
-## Step1
-#### Set Up Kernel-Planckster
+
+#### Step 1
+
+##### Set Up Kernel-Planckster
 
 First, clone the Kernel-Planckster repository onto your local machine:
 
 
 `git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
 
-#### Install Dependencies
+##### Install Dependencies
 
 Set up a virtual environment for Kernel-Planckster's dependencies.
 Run in the root directory of the kernel-planckster folder
@@ -125,18 +127,18 @@ poetry install`
 
 > **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
 
-#### Running Kernel-Planckster
+##### Running Kernel-Planckster
 
 Run Kernel-Planckster from the command line:
 
 `poetry run dev:storage`
 
-#### Access Kernel-Planckster's API and Object Storage
+##### Access Kernel-Planckster's API and Object Storage
 
 -   **API:** Accessible at ``` http://localhost:8000/ ``` with an interactive interface at ``` http://localhost:8000/docs ``` for testing and debugging.
 -   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/``` (or sometimes  ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
-## Step 2
+#### Step 2
 
 ``` python
 import logging
@@ -167,7 +169,6 @@ print(output)
 ```
 
 
-
 Twitter Scraper
 ---------------
 
@@ -194,7 +195,7 @@ The Twitter Scraper is designed to collect tweets based on search queries, allow
     -   `scraper_api_key`: API key for the scraper service.
     -   `openai_api_key`: API key for OpenAI services (if needed).
 
-### How to Configure the Twitter Scraper
+### Twitter Scraper Configuration
 
 To get started with the Twitter Scraper, follow these steps:
 
@@ -214,7 +215,7 @@ To get started with the Twitter Scraper, follow these steps:
         return client
     ```
 
-### How to Retrieve Tweets
+### Retrieving Tweets
 
 The `scrape` function retrieves tweets based on the provided search query and date range.
 
@@ -260,15 +261,16 @@ def scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_reposito
 
 Here's an example to demonstrate how to use the Twitter scraper:
 
-## Step1
-#### Set Up Kernel-Planckster
+#### Step 1
+
+##### Set Up Kernel-Planckster
 
 First, clone the Kernel-Planckster repository onto your local machine:
 
 
 `git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
 
-#### Install Dependencies
+##### Install Dependencies
 
 Set up a virtual environment for Kernel-Planckster's dependencies.
 Run in the root directory of the kernel-planckster folder
@@ -287,19 +289,19 @@ poetry install`
 
 > **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
 
-#### Running Kernel-Planckster
+##### Running Kernel-Planckster
 
 Run Kernel-Planckster from the command line:
 
 `poetry run dev:storage`
 
-#### Access Kernel-Planckster's API and Object Storage
+##### Access Kernel-Planckster's API and Object Storage
 
 -   **API:** Accessible at ``` http://localhost:8000/``` with an interactive interface at ```http://localhost:8000/docs``` for testing and debugging.
 -   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/``` (or sometimes ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
+#### Step 2
 
-## Step2
 ``` python
 import logging
 
@@ -354,7 +356,7 @@ The Sentinel Scraper is used to retrieve satellite images from the Sentinel Hub 
     -   `sh_client_id`: Sentinel Hub client ID.
     -   `sh_client_secret`: Sentinel Hub client secret.
 
-### How to Configure the Sentinel Hub Client
+### Sentinel Hub Client Configuration
 
 To use the Sentinel Scraper, follow these steps:
 
@@ -373,7 +375,7 @@ To use the Sentinel Scraper, follow these steps:
         config.sh_client_secret = sh_client_secret
         return config
     ```
-### How to Retrieve Satellite Images
+### Retrieving Satellite Images
 
 The `scrape` function retrieves satellite images from the Sentinel Hub based on the specified parameters.
 
@@ -428,15 +430,16 @@ def scrape(job_id, tracer_id, evalscript, bbox, resolution, cloud_coverage, star
 
 Here's an example to demonstrate how to use the Sentinel scraper:
 
-## Step1
-#### Set Up Kernel-Planckster
+#### Step 1
+
+##### Set Up Kernel-Planckster
 
 First, clone the Kernel-Planckster repository onto your local machine:
 
 
 `git clone https://github.com/dream-aim-deliver/kernel-planckster.git`
 
-#### Install Dependencies
+##### Install Dependencies
 
 Set up a virtual environment for Kernel-Planckster's dependencies.
 Run in the root directory of the kernel-planckster folder
@@ -455,19 +458,20 @@ poetry install`
 
 > **Note:** If `poetry` is unable to install `psycopg2`, use your system package manager to install it.
 
-#### Running Kernel-Planckster
+##### Running Kernel-Planckster
 
 Run Kernel-Planckster from the command line:
 
 `poetry run dev:storage`
 
-#### Access Kernel-Planckster's API and Object Storage
+##### Access Kernel-Planckster's API and Object Storage
 
 -   **API:** Accessible at ``` http://localhost:8000/ ``` with an interactive interface at ``` http://localhost:8000/docs ``` for testing and debugging.
 -   **Object Storage:** Accessible via the MinIO server at ``` http://localhost:9001/ ``` (or sometimes ``` http://localhost:9091/ ```). The "SDA" bucket is created when a scraper is run.
 
 
-## Step 2
+#### Step 2
+
 ``` python
 import logging
 
