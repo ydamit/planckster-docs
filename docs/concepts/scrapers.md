@@ -1,12 +1,12 @@
-Data Scrapers Guide
-===================
+Data Scrapers
+=============
 
-This guide covers three data scrapers: **Telegram Scraper**, **Twitter Scraper**, and **Sentinel Scraper**. Each section includes setup, configuration, usage, and examples.
+This document covers three key concepts regarding the scrapers: **Telegram Scraper**, **Twitter Scraper**, and **Sentinel Scraper**. It aims to show you what is happening behind your Kubeflow pipeline when you run the scrapers. It will explain what they do,their key arguments and functionalities in the current environment.
 
 Telegram Scraper
 ----------------
 
-The Telegram Scraper allows you to extract messages from specific Telegram channels using the Telethon Python package. This section provides detailed instructions on setting up and running the scraper.
+The Telegram Scraper allows you to extract messages from specific Telegram channels using the Telethon Python package. This section provides a detailed explanation on how Telegram the scraper is set up and operates. 
 
 ### Setup and Configuration
 
@@ -32,9 +32,9 @@ The Telegram Scraper allows you to extract messages from specific Telegram chann
 
 ### Telegram Scraper Configuration
 
-To use the Telegram Scraper, you'll need to set up a Telegram client. Here's how:
+To use the Telegram Scraper, a Telegram client is needed. Here's how it is done in Python:
 
-1.  **Install the Telethon Package**: Make sure you have the Telethon package installed. You can install it via pip:
+1.  **Install the Telethon Package**: Make sure the Telethon package is installed. It can be installed via pip:
 
 
     `pip install telethon`
@@ -54,7 +54,7 @@ To use the Telegram Scraper, you'll need to set up a Telegram client. Here's how
 
 ### Retrieving Messages
 
-Once the client is configured, you can retrieve messages from a specified channel using the `scrape` function.
+Once the client is configured, messages can be retreived from a specified channel using the `scrape` function.
 
 #### Function: `scrape`
 
@@ -80,9 +80,9 @@ async def scrape(job_id, channel_name, tracer_id, scraped_data_repository, teleg
 
 ```
 
-### Augmentation and Utility Functions
+### Augmentation
 
--   **Augmenting Data**: You can enhance the scraped messages by integrating data from other sources. For instance:
+-   **Augmenting Data**: The scraped messages can be enhanced by integrating data from other sources. For instance:
 
     ``` python
     def augment_telegram(client, message, filter):
@@ -92,10 +92,8 @@ async def scrape(job_id, channel_name, tracer_id, scraped_data_repository, teleg
             augmented_data.append(message.text)
         return augmented_data if augmented_data else None
     ```
-    
--   **Utility Functions**: Includes logging, error handling, job state management, and cleanup tasks.
 
-### Example: Running the Telegram Scraper Locally
+### Running the Telegram Scraper Locally
 
 Here is an example demonstrating how to use the Telegram scraper:
 
@@ -172,7 +170,7 @@ print(output)
 Twitter Scraper
 ---------------
 
-The Twitter Scraper is designed to collect tweets based on search queries, allowing you to specify date ranges and filter results. This section provides a step-by-step guide to using it effectively.
+The Twitter Scraper is designed to collect tweets based on search queries, allowing you to specify date ranges and filter results. TThis section provides a detailed explanation on how Twitter the scraper is set up and operates. 
 
 ### Setup and Configuration
 
@@ -197,9 +195,9 @@ The Twitter Scraper is designed to collect tweets based on search queries, allow
 
 ### Twitter Scraper Configuration
 
-To get started with the Twitter Scraper, follow these steps:
+This is how the Telegram Scraper is set up in Python:
 
-1.  **Install Required Libraries**: Make sure you have the necessary libraries installed. Depending on your implementation, you might need libraries such as `tweepy` or other HTTP clients.
+1.  **Install Required Libraries**: Make sure the necessary libraries are installed, such as `tweepy`:
 
 
     `pip install tweepy`
@@ -243,7 +241,7 @@ def scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_reposito
     return JobOutput(state='FINISHED', data=tweets.data)
 ```
 
-### Augmentation and Utility Functions
+### Augmentation
 
 -   **Augmenting Data**: Enhance the retrieved tweets by incorporating additional data or insights:
 
@@ -254,10 +252,7 @@ def scrape(job_id, tracer_id, query, start_date, end_date, scraped_data_reposito
         return None
     ```
 
-
--   **Utility Functions**: These include logging, error handling, job state management, and saving/loading tweets.
-
-### Example: Running the Twitter Scraper Locally
+### Running the Twitter Scraper Locally
 
 Here's an example to demonstrate how to use the Twitter scraper:
 
@@ -358,7 +353,7 @@ The Sentinel Scraper is used to retrieve satellite images from the Sentinel Hub 
 
 ### Sentinel Hub Client Configuration
 
-To use the Sentinel Scraper, follow these steps:
+This is how Sentinel Scraper is set up:
 
 1.  **Install Required Libraries**: Ensure that you have the necessary libraries installed, such as `sentinelhub` or `requests`.
 
@@ -414,9 +409,9 @@ def scrape(job_id, tracer_id, evalscript, bbox, resolution, cloud_coverage, star
     return JobOutput(state='FINISHED', data=images)
 ```
 
-### Augmentation and Utility Functions
+### Augmentation
 
--   **Augmenting Data**: You can enhance satellite images by applying image processing techniques:
+-   **Augmenting Data**: Satellite images can be enhanced by applying image processing techniques:
 
     ``` python
     def augment_image(image, filter):
@@ -424,9 +419,7 @@ def scrape(job_id, tracer_id, evalscript, bbox, resolution, cloud_coverage, star
         return processed_image
     ```
 
--   **Utility Functions**: Includes logging, error handling, job state management, and saving/loading images.
-
-### Example: Running the Sentinel Scraper Locally
+### Running the Sentinel Scraper Locally
 
 Here's an example to demonstrate how to use the Sentinel scraper:
 

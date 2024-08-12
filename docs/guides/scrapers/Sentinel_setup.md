@@ -9,7 +9,7 @@ sidebar_position: 2
 This guide details how to set up a local instance of the Sentinel Image Scraper, which uses the SentinelHub API to scrape images for a given location and date.
 
 ## Prerequisites
- ### 1.Setting Up Docker
+ ### 1. Setting Up Docker
 
 Before using Docker, you need to have it installed on your system. Follow these steps to ensure Docker is installed:
 
@@ -84,7 +84,7 @@ By following these steps, you will ensure that Docker is installed and running o
 
 ### 3. Obtain a client ID and client secret from [Sentinel Hub](https://www.sentinel-hub.com/).
 
-**Optional: Create a Virtual environment to avoid any package version conflicts**
+**Optional:** Create a Virtual environment to avoid any package version conflicts
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate

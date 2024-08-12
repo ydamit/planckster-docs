@@ -5,7 +5,9 @@ sidebar_position: 3
 
 # Analyzing Scraped Data with Kubeflow Notebooks
 
-## First, connect to kernel-planckster:
+This guide walks you through the [Kernel-Planckster Tutorial Notebook](https://kubeflow.devmaany.com/notebook/planckster-example/example-kernel-planckster/?folder=/home/jovyan/kernel-planckster-demo). It aims to provide broader detail on how to view and analyze the scraped data obtained when running the kubeflow pipelines. 
+
+### Step 1: First, connect to kernel-planckster:
 
 ```
 kernel_planckster, protocol, file_repository = setup(
@@ -14,14 +16,14 @@ kernel_planckster, protocol, file_repository = setup(
 )
 ```
 
-#### Verify the existence of scraped data:
+### Step 2: Verify the existence of scraped data:
 
 ```
 source_list = kernel_planckster.list_all_source_data()
 ```
 
-#### There should exist an output that looks like the following:
-##### Note the mix of scraped and augmented data that is pulled.
+There should exist an output that looks like the following:
+
 ```
 [
 
@@ -55,8 +57,10 @@ source_list = kernel_planckster.list_all_source_data()
 }
 
 ```
-## 
-#### Download all of the data sources deemed relevant to a local folder in the Kubeflow Notebook
+Note the mix of scraped and augmented data that is pulled.
+
+
+### Step 3: Download all of the data sources deemed relevant to a local folder in the Kubeflow Notebook
 
 ```
 work_dir = "./.tmp"
@@ -65,7 +69,7 @@ for source in source_list:
 
 ```
 
-#### Where ```download_source_if_relevant``` is a function that calls:
+Where ```download_source_if_relevant``` is a function that calls:
 
 ```
 signed_url = kernel_planckster.download_from_signed_url(source) 
@@ -73,16 +77,16 @@ file_repository.public_download(signed_url=signed_url, file_path="./LOCAL_DIRECT
 
 ```
 
-#### Or, use the utility functions in ```scraped_data_repository.py``` that take care of file naming, formatting, and saving:
+Or, use the utility functions in ```scraped_data_repository.py``` that take care of file naming, formatting, and saving:
 
 * ```scraped_data_repository.download_img(source, job_id, path)```
 * ```scraped_data_repository.download_json(source, job_id, path)```
 * etc.
 
 
-## After saving all relevant data, perform the desired vizualizations:
+### Step 4: After saving all relevant data, perform the desired vizualizations:
 
-#### Note: visualizations require having *matched* satellite and social media data. This type of augmentation is usually performed by an **Augmentation Repository**, but in case it hasn't, one can use the following code:
+**Note:** visualizations require having *matched* satellite and social media data. This type of augmentation is usually performed by an **Augmentation Repository**, but in case it has not, one can use the following code:
 
 ```
 # load tweets (or any kind of scraped social media) data that is relevant to the particular usecase (wildfires/disaster)
@@ -130,12 +134,11 @@ underscore_date=wildifre_coords_json_file_path[:wildifre_coords_json_file_path.i
 
 ```
 
+Clearly, tweets that are relevant to a particular disaster and ouccur on the same day as disasters detected by sattelite images are matched and the locations of both types of data can be compared and analyzed.
 
-##### Clearly, tweets that are relevant to a particular disaster and ouccur on the same day as disasters detected by sattelite images are matched and the locations of both types of data can be compared and analyzed.
+### Step 5: Analyze the output using leafmap:
 
-### Analyze the output using leafmap:
-
-#### Load the true-color image from our sentinel dataset
+1. Load the true-color image from our sentinel dataset:
 ```
 from pystac_client import Client
 
@@ -153,7 +156,7 @@ for item in items:
 
 ```
 
-#### Create the interactive leafmap:
+2. Create the interactive leafmap:
 
 ```
 import leafmap.foliumap as leafmap #choose one of 6 plotting backends
@@ -169,7 +172,7 @@ m
 
 ```
 
-#### Overlay the augmented social media data and disaster events
+3. Overlay the augmented social media data and disaster events:
 
 ```
 
@@ -223,7 +226,7 @@ for file_path in os.listdir(os.path.join(work_dir, "by_date")):
 m
 ```
 
-#### The output should be interactive and have dynamic overlays:
+The output should be interactive and have dynamic overlays:
 
 ![link text](./images/demo-output.png)
 

@@ -7,7 +7,13 @@ sidebar_position: 4
 
 ## Understanding the DAG structure:
 
-The DAG or *Directed Acyclic Graph* is the visual representation of a Kubeflow pipeline. It consists of *pipeline nodes* which are actually *wrappers* that configure and run a docker container.
+The DAG or *Directed Acyclic Graph* is the visual representation of a Kubeflow pipeline [^1]. It consists of *pipeline nodes*[^2] which are actually *wrappers*[^3] that configure and run a docker container[^4]. Below you can see how the Scraper DAG and the Augmentation Engine DAG look:
+
+[^1]: A pipeline is a sequence of processing stages, where each stage performs a specific operation (on data or tasks) and the output becomes the input of the next stage. In the [Kubeflow introduction guide](../guides/kubeflow/kubeflow-features-and-ui-walkthrough.md) you will find a more detailed explanation of Kubeflow pipelines.
+[^2]: A pipeline node is one of the stages of the pipeline.
+[^3]: A wrapper is a piece of code provinding a layer of abstraction to another piece of code. 
+[^4]: A Docker container is an isolated environment within a computer that encapsulates everything required to run a piece of code, program, or software. This container is created from a Docker image, which serves as a template containing the executable software package and all the necessary dependencies and configurations to ensure the program runs smoothly.
+
 
 ### Scraper DAG:
 ![Scraper DAG](images/scraper-dag.png)
@@ -17,15 +23,16 @@ The Scraper DAG consists of **3 nodes** which run in parallel. Each node is a wr
 ### Augmentation Engine DAG
 ![Augmentation  DAG](images/augmentation-dag.png)
 
-The Augmentation Engine DAG consists of **1 node** representing the wrapper for the disaster-usecase augmentation engine. This pipeline is run **after** the scraper pipeline successfully completes its run (meaning that all three node complete their respective runs):
+The Augmentation Engine DAG consists of **1 node** representing the wrapper for the disaster-usecase augmentation engine. This pipeline is run **after** the scraper pipeline successfully completes its run (meaning that all three node complete their respective runs) like it is shown below:
 
 ![A Successful Run](images/successful-scraper-run.png)
 
 ## Properties of a DAG element
+
+A list of properties for an node (in this case sentinel) can be viewed by clicking on it. The most important properties include **Input parameters**, **Arguments**, **Image**, and **Version** (listed in the "Summary" box). 
+
 ![Sentinel node properties 1](images/sentinel-properties-1.png)
 ![Sentinel node properties 2](images/sentinel-properties-2.png)
-
-A list of properties for an node (in this case sentinel) can be viewed by clicking on it. The most important properties include **Input parameters**, **Arguments**, **Image**, and **Version** (in the "Summary" box). 
 
 ### Input Parameters
 
@@ -39,18 +46,20 @@ Thus, runs for both the scraper-pipeline and augmentation-pipeline need to be co
 
 ### Arguments
 
-Arguments are what are fed via the CMD line to the scraper before it runs. Unlike Input parameters, arguments are *node-specific* as each scraper uses different arguments depending on its context and function. Note that start-date, end_date, job_id, and tracer_id are actually *arguments*; however, their values are inherited from their *Input Parameter Value*. Note that the scraper itself actually has more arguments like api keys; however, many of these arguments are hardcoded in and thus we can only see arguments that are available to the wrapper/node. 
+Arguments are what are fed via the command line to the scraper before it runs. Unlike Input parameters, arguments are *node-specific* as each scraper uses different arguments depending on its context and function. Note that start-date, end_date, job_id, and tracer_id are actually *arguments*; however, their values are inherited from their *Input Parameter Value*. Note that the scraper itself actually has more arguments like api keys; however, many of these arguments are hardcoded in and thus we can only see arguments that are available to the wrapper/node. 
 
 * The sentinel-specific arguments are "long-left" (leftmost longitude), "lat-down" (down-most latitude), "long-right" (rightmost longitude), "lat-up" (topmost latitude), and "resolution" (height of image in meters) which together represent the geographic bounding box and level of detail for a region. 
 * The only telegram-specific argument is "channel-name" which is the specific publicly-available channel that should be scraped. 
 * The only twitter-specific argument is "query" which is the unique search-term to use when scraping tweets.
 * The augmentation engine takes no additional arguments. 
 
-### Image
+### Image [^5]
+
+[^5]: Refers to the docker image (specific requirements to run a piece of software) that creates a docker container.
 
 The Image name is critical as it specifies which dockerized representation of the scraper the wrapper should use. For sentinel, we choose the image "maany/mpi-sda-satellite:2.0.0" hosted on DockerHub (the other scrapers and augmentation engine are named similarly). 
 
-Note: we have setup release automation on our github for each of the scraper/augmentation repositories which automatically create a docker image for each major code release.
+Note: The docker images are built and deployed to DockerHub automatically when a release of the data scrapper is made.
 
 ### Version
 
@@ -73,12 +82,12 @@ The notebook for a pipeline defines all of the nodes and their properties via *w
 
 ![Sentinel Wrapper](images/sentinel-wrapper.png)
 
-Note how the scraper itself has more CMD line arguments than what it exposes to its wrapper/node. This makes pipelines easier to configure *on a usecase basis* by focusing on real-world arguments like dates and coordinates rather than code-specific arguments like API keys. 
+Note how the scraper itself has more command line arguments than what it exposes to its wrapper/node. This makes pipelines easier to configure *on a usecase basis* by focusing on real-world arguments like dates and coordinates rather than code-specific arguments like API keys. 
 
 
 ### Setup the pipeline/DAG
 
-The order nodes run in is determined by the how the pipeline is setup:
+The order in which nodes run is determined by the how the pipeline is setup:
 
 ![Scrapers task](images/scrapers-task.png)
 
@@ -86,7 +95,7 @@ Because all three scraper tasks are executed in a single function, they run in p
 
 ### Compile the pipeline/DAG
 
-In order to view the pipeline and have the ability to create a run, it must be compiled and uploaded with a unique version name:
+To be able to run a pipeline, it has to be compiled and uploaded with a unique version name:
 
 ![Compile Pipeline](images/compile-pipeline.png)
 

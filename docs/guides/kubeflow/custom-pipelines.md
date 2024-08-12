@@ -5,26 +5,30 @@ sidebar_position: 4
 
 # Custom Pipelines in Kubeflow
 
-## Creating a Pipeline Notebook:
+## How to create a Pipeline Notebook?
 
-#### Navigate to the "Notebooks" page of Kubeflow and press *+ New Notebook*:
+### 1. Navigate to the "Notebooks" page of Kubeflow and press *+ New Notebook*.**
+
+A page like the following will be displayed:
 
 ![config 1](images/notebook-config-1.png)
+
+### 2. When you are in the *New Notebook* page you will:
 
 * Select a descriptive name for the notebook
 * Select VisualStudio Code as the editor for the notebook
 * Select an appropriate amount of CPU and RAM for the pipeline
 * Add more storage to the volume if needed
+* Check **Allow access to Kubeflow Pipelines** in the *Configurations* dropdown. This step is critical to allow this notebook to create a new (custom) pipeline. 
 
 ![config 2](images/notebook-config-2.png)
 
-* Check **Allow access to Kubeflow Pipelines** in the *Configurations* dropdown. This step is critical to allow this notebook to create a new (custom) pipeline. 
 * Click *Launch*
 
 
-## Create a new DAG with existing pipeline elements:
+## How to create a new DAG with existing pipeline elements?
 
-### Create and setup the .ipynb Notebook:
+### 1. Create and setup the .ipynb Notebook
 
 ```
 !pip install kfp==1.8.22
@@ -34,16 +38,17 @@ from kfp import compiler, dsl
 kfp.Client() # this can be used to test if the connection is successful
 ```
 
-Note: We use kfp version 1.8.22 throughout our entire Kubeflow instance, Compatibility >2.0.0 versions will arrive in v3. 
+**Note:** We use kfp version 1.8.22 throughout our entire Kubeflow instance, Compatibility >2.0.0 versions will arrive in v3. 
 
-#### Example:
+**Example:**
+
 ![create ipynb](images/create-ipynb.png)
 
 * Create a new .ipynb notebook within the home folder of the default user (Jovyan)
 * Select a python kernel, ideally a new conda environment. 
 * Install the "kfp" python package (allows connecting to Kubeflow client)
 
-### Loading components
+### 2. Loading components
 
 In general, components can be loaded and reused using the following code:
 
@@ -51,15 +56,15 @@ In general, components can be loaded and reused using the following code:
 component = kfp.components.load_component_from_file("./component.txt")
 ```
 
-#### Example:
+**Example:**
 
 ![load components](images/loading-components.png)
 
 We can load the sentinel, twitter, and telegram components defined in the original *SDA-disaster-scrapers.ipynb"* notebook. This avoids having to redefine the long wrapper functions for these components. 
 
-Note: This functionality requires components to be saved to a .txt file: see the next section
+*Note:* This functionality requires components to be saved to a .txt file: see the next section
 
-### Saving Components
+### 3. Saving Components
 
 In general, components can be saved with the following code after ```component_wrapper``` is defined:
 
@@ -71,7 +76,7 @@ with open("./components/component.txt", "w") as text_file:
 
 ```
 
-#### Example:
+**Example:**
 
 ![save components](images/saving-components.png)
 
@@ -79,7 +84,7 @@ with open("./components/component.txt", "w") as text_file:
 This is how we save components to .txt files in the original *sda-disaster-scrapers.ipynb* notebook.
 
 
-### Assemble Custom Pipelines:
+### 4. Assemble Custom Pipelines
 
 In general, custom pipelines are assembled as a set of tasks with execution options:
 
@@ -94,11 +99,11 @@ def custom_pipeline_1(INPUT PARAMETERS): # Input Parameters can be adjusted in t
     component2.execution_options.caching_strategy.max_cache_staleness = "P0D"
 ```
 
-#### Example:
+**Example:**
 
 ![assemble custom pipelines](images/assemble-custom-pipeline.png)
 
-### Compile Custom Pipelines:
+### 5. Compile Custom Pipelines
 
 In general, custom pipelines are compiled to a .yaml file which is then uploaded to Kubeflow:
 
@@ -116,39 +121,39 @@ kfp.Client().upload_pipeline(
 
 ```
 
-#### Example
+**Example:**
 
 ![compile custom pipelines](images/compile-custom-pipeline.png)
 
 Note that a pipeline can only be uploaded *once* with the same version. To reupload, bump up the version number in the *pipeline_name* option when compiling. 
 
 
-## Create a run for the pipeline:
+## How to create a run for the pipeline?
 
-#### First, navigate to the Pipelines page:
+### 1. Navigate to the Pipelines page:
 
 ![pipelines page](images/pipelines-page.png)
 
-#### Click on a custom pipeline and select *+ Create run*
+### 2. Click on a custom pipeline and select *+ Create run***
 
 ![custom pipeline page](images/custom-pipeline-page.png)
 
-#### Configure the run:
-
-![custom pipeline config 1](images/custom-pipeline-config-1.png)
-![custom pipeline config 2](images/custom-pipeline-config-2.png)
+### 3. Configure the run:**
 
 * Leave pipeline name, version, and run name as default.
 * Choose an experiment that is relevant to the run: this is purely organizational.
 * Specify Input Parameters. Note: It's good practice to choose a new job_id every run. 
 
-Click *Start* 
+![custom pipeline config 1](images/custom-pipeline-config-1.png)
+![custom pipeline config 2](images/custom-pipeline-config-2.png)
 
-#### View logs:
+* Click ***Start***
+
+### 4. View logs:
 
 ![view logs](images/view-logs.png)
 
-#### Ensure successful job completion:
+### 5. Ensure successful job completion:
 
 ![successful job completion](images/successful-job-completion.png)
 
