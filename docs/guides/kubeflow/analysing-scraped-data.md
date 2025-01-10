@@ -1,6 +1,6 @@
 ---
 sidebar_label: Analyzing Scraped Data
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Analyzing Scraped Data with Kubeflow Notebooks

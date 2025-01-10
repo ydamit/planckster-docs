@@ -3,6 +3,10 @@ sidebar_label: Introduction
 sidebar_position: 1
 ---
 
+# Lieutenant Planckster Instructional Video
+
+[Click here for a quick video guide](https://youtu.be/arP1y2DqECw) for using Lt. Planckster! [This video](https://youtu.be/arP1y2DqECw) provides the most basic instructions for how to use Kubeflow in the context of Kernel Planckster. It may be sufficient on its own, but can be combined with the documentation provided in this section for a deeper understanding of the data processing machinery that supports Case Studies in Websat.
+
 # Kubeflow
 
 Kubeflow is a platform that makes it easier to house, test, automate, and monitor the machinery necessary for AI / Machine Learning based workflows. It's a kind of "command center" that allows you to orchestrate the code, data sources, and other resources you need to use.
